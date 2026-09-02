@@ -32,58 +32,23 @@
         <div class="principal">
             <aside class="aside-menu">
                 <h3>Géneros</h3>
-
-                <div id="genreContainer">
-                    <a href="#">Todos</a>
-                </div>
-                <div id="genreContainer">
-                    <a href="#">Romance</a>
-                </div>
-                <div id="genreContainer">
-                    <a href="#">Terror</a>
-                </div>
-                <div id="genreContainer">
-                    <a href="#">Accion</a>
-                </div>
-                <div id="genreContainer">
-                    <a href="#">Comedia</a>
-                </div>
+                <div class="genreContainer" aria-label="Filtros de géneros"></div>
             </aside>
 
             <section id="cartelera" class="cartelera container">
                 <h3>Cartelera</h3>
-                <!-- Contenedor vacío donde JavaScript añadirá las tarjetas de películas -->
-
-                <div id="movieContainer" class="movie-grid" aria-live="polite">
-                    <div class="movie-grid">
-                        <article class="movie-card">
-                            <img src="images/poster-diario-de-una-pasion.jpg" alt="Diario de una pasión"
-                                class="movie-card__image">
-                            <div class="movie-card__content">
-                                <h4 class="movie-card__title">Diario de una pasión</h4>
-                                <p class="movie-card__description">Una historia de amor que trasciende el tiempo y las
-                                    adversidades.</p>
-                                <div class="movie-card__meta">
-                                    <span class="movie-card__genre">Romance/Drama</span>
-                                    <span class="movie-card__duration">123 min</span>
-                                </div>
-                                <button class="movie-card__button">Ver detalles</button>
-                            </div>
-                        </article>
-                    </div>
-
-                </div>
+                <div id="movieContainer" class="movie-grid" aria-live="polite"></div>
             </section>
         </div>
     </main>
 
-    <footer class="site-footer" id="years">
+    <footer class="site-footer">
         <div class="container footer-inner">
             <p>&copy; <span id="years"></span> Cinema Web. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <script src="js/app.js" defer></script>
+    <script src="js/jquery.js" defer></script>
 </body>
 
 </html>

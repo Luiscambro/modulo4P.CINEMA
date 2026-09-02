@@ -27,6 +27,7 @@ main {
     display: block;
 }
 
+
 .principal {
     display: flex;
     justify-content: center;
@@ -40,13 +41,19 @@ main {
 }
 
 .aside-menu {
-    width: 30%;
+    
+   
     max-width: var(--medium-width);
     background-color: var(--surface);
     margin: 30px auto 0 0;
     text-align: center;
     border-top-right-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
+    width: 20%;
+    left: 50px;
+    height: 100%;
+    
+
 }
 
 /* Header */
@@ -108,29 +115,38 @@ main {
 
 /*menu lateral*/
 
-#genreContainer {
-    display: flex;
-    flex-direction: column;
+.genreContainer {
+    display:block;
+    grid-template-columns: 20% 1fr;
+    gap: 30px;
+    align-items: stretch;
+    height: 100%;
 }
 
 .aside-menu h3 {
     text-transform: capitalize;
     font-size: 1.5rem;
+    margin-bottom: 10px;
 }
 
-.aside-menu a {
+.aside-menu a,
+.genre-link {
     color: var(--muted);
     text-decoration: none;
     text-transform: capitalize;
     font-size: 1.2rem;
     font-weight: 600;
-    margin: 10px 0;
-
+    margin: 8px 0;
+    display: block;
+    transition: color .15s ease, transform .15s ease;
+    cursor: pointer;
 }
 
-.aside-menu a:hover {
-    font-size: 1.4rem;
+.aside-menu a:hover,
+.genre-link:hover,
+.genre-link.is-active {
     color: var(--over);
+    transform: translateX(2px);
 }
 
 
