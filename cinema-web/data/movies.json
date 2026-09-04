@@ -4,7 +4,11 @@
         "Aventura",
         "Drama",
         "Animación",
-        "Ciencia ficción"
+        "Ciencia ficción",
+        "Fantasía",
+        "Romance",
+        "Thriller",
+        "Misterio"
     ],
     "movies": [
         {
