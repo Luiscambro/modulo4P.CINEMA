@@ -33,8 +33,33 @@
             </div>
         </section>
         <div class="principal">
-            <aside class="aside-menu">
-                <h3>Géneros</h3>
+            <!--
+                Este botón solo se muestra mediante CSS en pantallas de hasta 720px.
+                aria-controls relaciona el botón con el menú que controla.
+                aria-expanded indica si el menú está cerrado (false) o abierto (true).
+            -->
+            <button class="menu-toggle" type="button" aria-controls="genreMenu" aria-expanded="false">
+                <span>Explorar géneros</span>
+                <span class="menu-toggle__icon" aria-hidden="true">☰</span>
+            </button>
+
+            <!--
+                Esta capa oscura aparece detrás del menú en móviles y tablets.
+                hidden hace que empiece invisible; JavaScript lo quita al abrir el menú.
+            -->
+            <div class="menu-backdrop" hidden></div>
+
+            <!--
+                En escritorio este aside permanece visible como menú lateral.
+                En móviles y tablets CSS lo oculta fuera de la pantalla y JavaScript
+                le añade la clase is-open para deslizarlo hacia dentro.
+            -->
+            <aside id="genreMenu" class="aside-menu" aria-label="Filtrar películas por género">
+                <div class="aside-menu__header">
+                    <h3>Géneros</h3>
+                    <!-- Este botón solo aparece dentro del panel responsive. -->
+                    <button class="menu-close" type="button" aria-label="Cerrar menú de géneros">&times;</button>
+                </div>
 
                 <div id="genreContainer" class="genreClass">
                     <a href="#">Todos</a>
@@ -43,18 +68,38 @@
 
             <section id="cartelera" class="cartelera container">
                 <h3>Cartelera</h3>
-                <div id="movieContainer" class="movie-grid" aria-live="polite"></div>
+                <!-- Contenedor vacío donde JavaScript añadirá las tarjetas de películas -->
+
+                <div id="movieContainer" class="movie-grid" aria-live="polite">
+                    <div class="movie-grid">
+                        <article class="movie-card">
+                            <img src="images/poster-diario-de-una-pasion.jpg" alt="Diario de una pasión"
+                                class="movie-card__image">
+                            <div class="movie-card__content">
+                                <h4 class="movie-card__title">Diario de una pasión</h4>
+                                <p class="movie-card__description">Una historia de amor que trasciende el tiempo y las
+                                    adversidades.</p>
+                                <div class="movie-card__meta">
+                                    <span class="movie-card__genre">Romance/Drama</span>
+                                    <span class="movie-card__duration">123 min</span>
+                                </div>
+                                <button class="movie-card__button">Ver detalles</button>
+                            </div>
+                        </article>
+                    </div>
+
+                </div>
             </section>
         </div>
     </main>
 
     <footer class="site-footer">
         <div class="container footer-inner">
-            <p>&copy; <span id="years"></span> Cinema Web. Todos los derechos reservados.</p>
+            <p>&copy; <span id="year"></span> Cinema Web. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <script src="js/jquery.js" defer></script>
+    <script src="js/app.js" defer></script>
 </body>
 
 </html>

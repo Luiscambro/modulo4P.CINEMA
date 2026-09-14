@@ -21,17 +21,19 @@ body {
     background: linear-gradient(180deg, #071026 0%, #0b1220 100%);
     color: #e6eef6;
     -webkit-font-smoothing: antialiased;
+    /* Reserva el espacio que ocupa el header fijo para que no tape el contenido. */
+    padding-top: 80px;
 }
-
-main {
-    display: block;
-}
-
 
 .principal {
+    /*
+        En escritorio el menú sale del flujo por ser fixed. Este padding reserva
+        el 20% de ancho del menú más 15px de separación para que no tape la cartelera.
+    */
     display: flex;
     justify-content: center;
     gap: 15px;
+    padding-left: calc(20% + 15px);
 }
 
 .container {
@@ -41,19 +43,146 @@ main {
 }
 
 .aside-menu {
-    
-   
     max-width: var(--medium-width);
     background-color: var(--surface);
-    margin: 30px auto 0 0;
+    margin: 0;
     text-align: center;
     border-top-right-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
+    /* El menú ocupa el 20% izquierdo y se extiende desde debajo del header hasta el final. */
     width: 20%;
-    left: 50px;
-    height: 100%;
-    
+    left: 0;
+    top: 80px;
+    bottom: 0;
+    height: auto;
+    /* fixed lo mantiene lateral mientras el contenido principal se desplaza. */
+    position: fixed;
+    /* Si hay muchos géneros, se desplaza el menú sin aumentar ni tapar el body. */
+    overflow-y: auto;
+    /* Queda por encima del contenido, pero no lo tapa porque .principal reserva su espacio. */
+    z-index: 900;
+}
 
+.menu-toggle,
+.menu-close,
+.menu-backdrop {
+    /* Estos controles pertenecen al modo responsive y permanecen ocultos en escritorio. */
+    display: none;
+}
+
+@media (max-width: 720px) {
+    .menu-toggle {
+        /* El botón sustituye visualmente al menú lateral en móviles y tablets. */
+        display: flex;
+        position: fixed;
+        top: 92px;
+        left: 5%;
+        z-index: 800;
+        width: 90%;
+        min-height: 44px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--over);
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    .menu-toggle__icon {
+        color: var(--accent);
+        font-size: 1.25rem;
+    }
+
+    .menu-toggle:hover,
+    .menu-toggle:focus-visible,
+    .menu-close:hover,
+    .menu-close:focus-visible {
+        background: var(--accent);
+    }
+
+    .aside-menu {
+        /*
+            En móvil el aside deja de ocupar espacio permanente en la página.
+            Se coloca fuera de la pantalla y JavaScript lo muestra con .is-open.
+        */
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1001;
+        width: min(82vw, 320px);
+        max-width: none;
+        height: 100vh;
+        padding-top: 28px;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        transform: translateX(-105%);
+        transition: transform .2s ease;
+    }
+
+    .aside-menu.is-open {
+        /* translateX(0) devuelve el panel a su posición visible. */
+        transform: translateX(0);
+    }
+
+    .aside-menu__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+    }
+
+    .aside-menu__header h3 {
+        margin: 0;
+    }
+
+    .menu-close {
+        display: block;
+        width: 32px;
+        height: 32px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--over);
+        cursor: pointer;
+        font-size: 1.4rem;
+        line-height: 1;
+    }
+
+    .menu-backdrop:not([hidden]) {
+        /* La capa cubre el fondo y permite cerrar el panel con un clic fuera. */
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(3, 7, 14, 0.7);
+    }
+
+    body.menu-is-open {
+        /* Evita que el contenido del fondo se desplace mientras el panel está abierto. */
+        overflow: hidden;
+    }
+
+    .principal {
+        display: flex;
+        flex-direction: column;
+        padding-left: 0;
+    }
+
+    .cartelera.container {
+        padding-top: 80px;
+        width: 90%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aside-menu {
+        transition: none;
+    }
 }
 
 /* Header */
@@ -61,6 +190,20 @@ main {
     background: var(--surface);
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     padding: 12px 0;
+    /* position: fixed para que el header se mantenga fijo en la parte superior */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* hago responsive el header para que se vea bien en celulares y tablets */
+@media (min-width: 480px) {
+    .site-header {
+        display: block;
+        justify-content: center;
+        
+    }
 }
 
 .header-inner {
@@ -116,7 +259,7 @@ main {
 /*menu lateral*/
 
 .genreContainer {
-    display:block;
+    display: block;
     grid-template-columns: 20% 1fr;
     gap: 30px;
     align-items: stretch;

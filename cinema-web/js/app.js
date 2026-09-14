@@ -1,5 +1,20 @@
+// Contenedor donde se dibujan las tarjetas de películas.
 const movieContainer = document.getElementById("movieContainer");
+
+// Contenedor que recibe los enlaces de géneros creados desde movies.json.
 const genreContainer = document.getElementById("genreContainer");
+
+// Permite saber si la ventana está en modo móvil/tablet (720px o menos).
+// La misma condición existe en CSS para que ambos archivos cambien de modo juntos.
+const mobileQuery = window.matchMedia("(max-width: 720px)");
+
+// Elementos que forman el comportamiento del menú hamburguesa.
+const genreMenu = document.getElementById("genreMenu");
+const menuToggle = document.querySelector(".menu-toggle");
+const menuClose = document.querySelector(".menu-close");
+const menuBackdrop = document.querySelector(".menu-backdrop");
+let allMovies = [];
+let activeGenre = "Todos";
 
 async function getData() {
     const response = await fetch('data/movies.json');
@@ -66,10 +81,12 @@ function addButtonAction() {
 }
 
 function filterByGenre(movies) {
+    // Se seleccionan todos los enlaces, incluido "Todos", después de renderizarlos.
     const genreButtons = document.querySelectorAll(".aside-menu a");
 
     genreButtons.forEach((genreButton) => {
         genreButton.addEventListener("click", () => {
+            // "Todos" devuelve todas las películas; los demás enlaces comparan géneros.
             const filteredMovies = movies.filter(movie => {
                 if (genreButton.innerHTML == "Todos") {
                     return movie.genre
@@ -77,9 +94,66 @@ function filterByGenre(movies) {
                     return movie.genre.split("/").includes(genreButton.innerHTML);
                 }
             })
+
+            // Se reemplazan las tarjetas por el resultado del filtro seleccionado.
             renderMovies(filteredMovies);
+
+            // En móvil, elegir un género también cierra el panel automáticamente.
+            closeMobileMenu();
         })
     })
+}
+
+function setMobileMenu(isOpen) {
+    // En escritorio no se modifica el menú: allí siempre debe permanecer lateral y visible.
+    if (!genreMenu || !menuToggle || !mobileQuery.matches) return;
+
+    // La clase is-open activa en CSS la animación que trae el panel desde la izquierda.
+    genreMenu.classList.toggle("is-open", isOpen);
+
+    // aria-expanded mantiene informado al lector de pantalla sobre el estado real.
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+
+    // Bloquea el scroll del fondo mientras el panel responsive está abierto.
+    document.body.classList.toggle("menu-is-open", isOpen);
+
+    if (menuBackdrop) {
+        // hidden oculta o muestra la capa que está detrás del menú.
+        menuBackdrop.hidden = !isOpen;
+    }
+}
+
+function closeMobileMenu() {
+    // Función reutilizable para cerrar el menú desde varios eventos diferentes.
+    setMobileMenu(false);
+}
+
+function setupMobileMenu() {
+    // Si falta algún elemento HTML, se cancela la configuración sin romper la página.
+    if (!genreMenu || !menuToggle) return;
+
+    // El botón hamburguesa abre el panel únicamente cuando mobileQuery es verdadero.
+    menuToggle.addEventListener("click", () => setMobileMenu(true));
+
+    // El panel se puede cerrar desde su botón interno o haciendo clic en el fondo oscuro.
+    menuClose?.addEventListener("click", closeMobileMenu);
+    menuBackdrop?.addEventListener("click", closeMobileMenu);
+
+    // Escape ofrece una forma rápida y accesible de cerrar el panel.
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeMobileMenu();
+    });
+
+    // Si el usuario gira el dispositivo o cambia el tamaño de la ventana a escritorio,
+    // se limpian las clases y atributos del modo móvil para evitar estados inconsistentes.
+    mobileQuery.addEventListener("change", () => {
+        if (!mobileQuery.matches) {
+            genreMenu.classList.remove("is-open");
+            document.body.classList.remove("menu-is-open");
+            menuBackdrop.hidden = true;
+            menuToggle.setAttribute("aria-expanded", "false");
+        }
+    });
 }
 
 async function init() {
@@ -90,6 +164,7 @@ async function init() {
 
     addButtonAction();
     filterByGenre(data.movies)
+    setupMobileMenu();
 
     $("#year").text(new Date().getFullYear());
 
