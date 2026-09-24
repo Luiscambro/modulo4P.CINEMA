@@ -202,7 +202,7 @@ body {
     .site-header {
         display: block;
         justify-content: center;
-        
+
     }
 }
 
@@ -375,6 +375,57 @@ body {
 
 .movie-card__button:hover {
     opacity: 0.95
+}
+
+     /*tarea*/
+/* Ventana modal para mostrar detalles de la película */
+
+.movie-modal {
+    position: fixed;
+    /*COLOCA LA VENTANA MODAL SOBRE EL CONTENIDO DE LA PÁGINA*/
+    inset: 0;
+    /*HACE QUE OCUPE TODA LA PANTALLA*/
+    display: grid;
+    /* UTILIZA GRID PARA CENTRAR EL CONTENIDO DE LA VENTANA MODAL */
+    place-items: center;
+    /* CENTRA EL CONTENIDO DE LA VENTANA MODAL */
+    padding: 1rem;
+    /* AGREGA ESPACIADO INTERNO A LA VENTANA MODAL */
+    background: rgba(0, 0, 0, 0.7);
+    /* AGREGA UN FONDO SEMITRANSPARENTE DETRÁS DE LA VENTANA MODAL */
+    z-index: 1000;
+    /* ASEGURA QUE LA VENTANA MODAL SE MUESTRE ENCIMA DE OTROS ELEMENTOS DE LA PÁGINA */
+}
+
+.movie-modal[hidden] {
+    display: none;
+    /* OCULTA LA VENTANA MODAL CUANDO EL ATRIBUTO HIDDEN ESTÁ PRESENTE */
+}
+
+.movie-modal__content {
+    width: min(100%, 500px);
+    /* ESTABLECE UN ANCHO MÁXIMO PARA EL CONTENIDO DE LA VENTANA MODAL */
+    padding: 1.5rem;
+    /* AGREGA ESPACIADO INTERNO AL CONTENIDO DE LA VENTANA MODAL */
+    background: white;
+    /* ESTABLECE EL COLOR DE FONDO DEL CONTENIDO DE LA VENTANA MODAL */
+    color: black;
+    /* ESTABLECE EL COLOR DEL TEXTO DEL CONTENIDO DE LA VENTANA MODAL */
+    border-radius: 8px;
+    /* AGREGA ESQUINAS REDONDEADAS AL CONTENIDO DE LA VENTANA MODAL */
+}
+
+/* Asegura que el contenido de la ventana modal se ajuste al ancho de la pantalla en dispositivos móviles */
+.movie-modal__content pre {
+    white-space: pre-wrap; /* PERMITE QUE EL TEXTO SE ENVUELVA EN VARIAS LÍNEAS SI ES NECESARIO */
+    word-wrap: break-word; /* PERMITE QUE LAS PALABRAS LARGAS SE ROMPAN Y SE AJUSTEN AL ANCHO DEL CONTENEDOR */
+    overflow-wrap: break-word;/* PERMITE QUE LAS PALABRAS LARGAS SE ROMPAN Y SE AJUSTEN AL ANCHO DEL CONTENEDOR */
+}
+
+ @media (max-width: 500px) {
+    .movie-modal__content pre {
+        width: 100%;
+    }
 }
 
 /* Footer */

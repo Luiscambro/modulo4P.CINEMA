@@ -1,0 +1,21 @@
+TAREA PARA HOY 24/09/2026  VENTANA FLOTANTE PARA INFORMACIONDE  DE LAS PELICULAS
+HTML crea la ventana
+        ↓
+JavaScript la encuentra con getElementById()
+        ↓
+JavaScript modifica hidden y textContent
+        ↓
+CSS determina cómo se ve
+
+
+tarea para hoy 
+
+1. Agregar cierre de la ventana.
+2. Volver a conectar botones después de filtrar.
+3. Corregir el bloque @media del CSS.
+4. Probar:
+   - abrir una película;
+   - verificar que corresponde;
+   - cerrar la ventana;
+   - filtrar por género;
+   - abrir una película filtrada.

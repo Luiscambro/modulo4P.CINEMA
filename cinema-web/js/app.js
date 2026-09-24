@@ -65,19 +65,45 @@ function renderGenres(genres) {
         genreContainer.append(link);
     });
 }
+//TAREA// 24/09/2026//
+// Agrega un evento click a cada botón de "Ver detalles" para mostrar la información de la película correspondiente.//
 
-function addButtonAction() {
+// Agrega un evento click a cada botón de "Ver detalles" para mostrar la información de la película correspondiente.//
+function addButtonAction(movies) {
+    const movieModal = document.getElementById("movieModal"); // Obtiene el elemento de la ventana modal por su ID
+    const modalContent = document.getElementById("movieModalText");// Obtiene el elemento donde se mostrará el contenido de la película en la ventana modal
+    const buttons = document.querySelectorAll(".movie-card__button");// Obtiene todos los botones de "Ver detalles" en las tarjetas de películas
+    const movieModalClose = document.getElementById("movieModalClose");// Obtiene el botón de cierre de la ventana modal por su ID
 
-    $(".movie-card__button").click(function () { $(".site-footer").css("background", "white"); })
 
-    /*const movieButtons = document.querySelectorAll(".movie-card__button");
+   // Agrega un evento click al botón de cierre de la ventana modal para ocultarla cuando se haga clic en él.//
+    movieModalClose.addEventListener("click", () => {
+        movieModal.hidden = true;
+    });
 
-    movieButtons.forEach((button) => {
+
+
+    // Agrega un evento click a cada botón de "Ver detalles" para mostrar la información de la película correspondiente.//
+    buttons.forEach((button) => {
+
+        // Agrega un evento click a cada botón de "Ver detalles" para mostrar la información de la película correspondiente.//
         button.addEventListener("click", () => {
-            console.log(button.dataset.movieId);
-        })
-    })*/
 
+            const movieId = Number(button.dataset.movieId);// Obtiene el ID de la película desde el atributo data-movie-id del botón
+
+            const movie = movies.find((movie) => movie.id === movieId);// Busca la película correspondiente en el arreglo de películas usando el ID obtenido
+
+
+            // Si se encuentra la película, muestra su información en la ventana modal.//
+            if (movie && modalContent && movieModal) {
+                // Muestra la información de la película en formato JSON en el contenido de la ventana modal.//
+                modalContent.textContent = JSON.stringify(movie, null, 2);
+
+                // Muestra la ventana modal estableciendo su propiedad hidden en false.//
+                movieModal.hidden = false;
+            }
+        });
+    });
 }
 
 function filterByGenre(movies) {
@@ -97,6 +123,7 @@ function filterByGenre(movies) {
 
             // Se reemplazan las tarjetas por el resultado del filtro seleccionado.
             renderMovies(filteredMovies);
+            addButtonAction(filteredMovies);
 
             // En móvil, elegir un género también cierra el panel automáticamente.
             closeMobileMenu();
@@ -155,16 +182,19 @@ function setupMobileMenu() {
         }
     });
 }
-
+// La función init() se ejecuta cuando el DOM está completamente cargado y listo para ser manipulado y sirve como
+//  punto de entrada para inicializar la aplicación. Se encarga de obtener los datos de películas y géneros, renderizarlos en la página, configurar los eventos de los botones y el menú móvil,
+//  y actualizar el año en el pie de página.//
 async function init() {
     const data = await getData();
     //console.log(data);   
     renderMovies(data.movies);
     renderGenres(data.genres);
 
-    addButtonAction();
-    filterByGenre(data.movies)
+    addButtonAction(data.movies); // tarea 24/09/2026// Agrega un evento click a cada botón de "Ver detalles" para mostrar la información de la película correspondiente.//
+    filterByGenre(data.movies);
     setupMobileMenu();
+    allMovies = data.movies;
 
     $("#year").text(new Date().getFullYear());
 
