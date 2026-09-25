@@ -1,21 +1,68 @@
-TAREA PARA HOY 24/09/2026  VENTANA FLOTANTE PARA INFORMACIONDE  DE LAS PELICULAS
-HTML crea la ventana
-        ↓
-JavaScript la encuentra con getElementById()
-        ↓
-JavaScript modifica hidden y textContent
-        ↓
-CSS determina cómo se ve
+# Proyecto Cinema Web
 
+## Cambios realizados
 
-tarea para hoy 
+### 1. Ventana de detalles de peliculas
 
-1. Agregar cierre de la ventana.
-2. Volver a conectar botones después de filtrar.
-3. Corregir el bloque @media del CSS.
-4. Probar:
-   - abrir una película;
-   - verificar que corresponde;
-   - cerrar la ventana;
-   - filtrar por género;
-   - abrir una película filtrada.
+- Cada tarjeta conserva el identificador de la pelicula en `data-movie-id`.
+- `addButtonAction()` detecta el boton seleccionado.
+- `dataset.movieId` obtiene el identificador del boton.
+- `find()` localiza el objeto correspondiente dentro del arreglo de peliculas.
+- `JSON.stringify(movie, null, 2)` convierte el objeto completo a JSON legible.
+- El resultado se muestra en el elemento `<pre id="movieModalText">`.
+- La ventana se abre cambiando `movieModal.hidden` a `false`.
+- El boton `Cerrar` vuelve a cambiar `hidden` a `true`.
+- Despues de filtrar por genero se vuelven a conectar los botones nuevos.
+
+### 2. Consumo de API externa
+
+La aplicacion ya no obtiene los datos desde `data/movies.json`. Usa la API externa:
+
+```text
+https://proyectocinemaapi.onrender.com/movies
+https://proyectocinemaapi.onrender.com/genres
+```
+
+En `js/app.js`:
+
+- `getMovies()` solicita las peliculas con `fetch()` y `async/await`.
+- `getGenres()` solicita los generos con `fetch()` y `async/await`.
+- `response.ok` comprueba si cada solicitud fue correcta.
+- `response.json()` convierte las respuestas en datos JavaScript.
+- `init()` recibe ambos resultados y conserva el renderizado y el filtro existentes.
+
+## Flujo de datos
+
+```mermaid
+flowchart TD
+    A[El navegador carga index.html] --> B[DOMContentLoaded ejecuta init]
+    B --> C[getMovies hace GET /movies]
+    B --> D[getGenres hace GET /genres]
+    C --> E[response.json convierte peliculas]
+    D --> F[response.json convierte generos]
+    E --> G[renderMovies crea tarjetas]
+    F --> H[renderGenres crea enlaces]
+    G --> I[Usuario pulsa Ver detalles]
+    I --> J[dataset.movieId obtiene el id]
+    J --> K[find localiza la pelicula]
+    K --> L[JSON.stringify convierte el objeto]
+    L --> M[textContent muestra el JSON en la ventana]
+    H --> N[Usuario pulsa un genero]
+    N --> O[filter filtra las peliculas]
+    O --> G
+```
+
+## Pruebas realizadas
+
+- `GET /movies` responde correctamente.
+- `GET /genres` responde correctamente.
+- La cartelera se genera con los datos de la API.
+- El filtro por genero se conserva.
+- El boton de detalles muestra la pelicula seleccionada.
+- El JSON se muestra completo en la ventana flotante.
+- La ventana puede cerrarse con el boton `Cerrar`.
+- Los botones siguen funcionando despues de filtrar.
+
+## Ejecucion
+
+Abre `cinema-web/index.html` con un servidor local, por ejemplo Five Server, y comprueba la aplicacion desde el navegador.
