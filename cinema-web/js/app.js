@@ -19,6 +19,15 @@ let activeGenre = "Todos";
 //Aqui empieza la tarea de conectar la api con el front end, para que se pueda ver la informacion de las peliculas en la pagina web.
 const API_URL = "https://proyectocinemaapi.onrender.com";//esto fue lo primero que hice.//
 
+
+
+// Aqui empiezo a crear el carrito de compras, para que se pueda agregar peliculas
+//  a la lista de compras y luego se pueda ver la lista de compras.//
+
+
+
+
+
 // **CORRECCION:** Se reemplaza getData() por dos funciones separadas.
 // Cada funcion obtiene un recurso concreto de la API y devuelve sus datos.
 async function getMovies() {
@@ -44,6 +53,7 @@ async function getMovies() {
 }
 
 async function getGenres() {
+   
     try {
         // Solicita la lista de generos al endpoint GET /genres.
         const response = await fetch(`${API_URL}/genres`);
@@ -53,18 +63,19 @@ async function getGenres() {
             throw new Error("No se pudieron obtener los generos.");
         }
 
-        // Convierte la respuesta JSON en un arreglo de textos.
-        const genres = await response.json();
+        // Convierte la respuesta JSON en un arreglo de strings.
+        const genres = await fetch(`${API_URL}/genres`).then(res => res.json());
 
         // Devuelve los generos para crear los enlaces del menu.
         return genres;
     } catch (error) {
         // Muestra el error en la consola y devuelve un arreglo vacio.
         alert("Error al cargar los generos:", error);
-        return [];
+        return genres = ["Todos"]; // Devuelve un arreglo con "Todos" para que el menú no quede vacío.
     }
 }
-
+    // Dibuja las tarjetas de películas en el contenedor movieContainer usando los datos obtenidos
+    //  desde /movies.
     function renderMovies(movies) {
 
         movieContainer.innerHTML = '';
@@ -75,8 +86,8 @@ async function getGenres() {
             article.classList.add("movie-card");
 
             // let texto = "<img src= " + movie.poster + " alt=" + movie.title + " class='movie-card__image'>"
-
-            article.innerHTML =
+           //  texto += "<div class='movie-card__content'>".
+          article.innerHTML =
                 `<img src="${movie.poster}" alt="${movie.title}" class="movie-card__image">
             <div class="movie-card__content">
                 <h4 class="movie-card__title">${movie.title}</h4>
@@ -228,6 +239,9 @@ async function getGenres() {
     //  punto de entrada para inicializar la aplicación. Se encarga de obtener los datos de películas y géneros, renderizarlos en la página, configurar los eventos de los botones y el menú móvil,
     //  y actualizar el año en el pie de página.//
     async function init() {
+              
+         console.table(movies)
+
         // **CORRECCION:** init() ya no depende de getData().
         // Obtiene las peliculas y los generos mediante funciones independientes.
         const movies = await getMovies();

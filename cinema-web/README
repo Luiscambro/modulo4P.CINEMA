@@ -66,3 +66,39 @@ flowchart TD
 ## Ejecucion
 
 Abre `cinema-web/index.html` con un servidor local, por ejemplo Five Server, y comprueba la aplicacion desde el navegador.
+
+## Guia de estudio: carrito de entradas
+
+Esta guia es el siguiente tramo de aprendizaje; no significa que el carrito o los pagos ya esten implementados.
+
+### Punto de partida
+
+- `getMovies()` obtiene las peliculas de la API y `renderMovies(movies)` crea sus tarjetas en `js/app.js`.
+- En `index.html`, el contenedor del carrito tiene `cartItems`, `totalQuantity`, `totalPrice` y `emptyCartMessage`. JavaScript actualizara esos elementos.
+- La pelicula tiene horarios, pero comprueba la respuesta real de la API para saber si tambien proporciona un precio. No asumas que `data/movies.json` es la fuente que usa la aplicacion.
+
+### Siguiente sesion: mostrar el carrito
+
+1. **Inspecciona la respuesta de la API.** En las herramientas de desarrollo del navegador, revisa los objetos que devuelve `getMovies()`. Identifica el tipo de `id` y los nombres de las propiedades disponibles. La respuesta ya contiene objetos; no hace falta reconstruir cada pelicula.
+
+2. **Define que compra el usuario.** Para este proyecto, una seleccion debe distinguir pelicula, horario y cantidad de entradas. Si la API no tiene precio, usa un valor temporal solo para practicar y etiquetalo como precio de prueba.
+
+3. **Crea el estado en memoria.** En JavaScript, prepara un arreglo `cart` inicialmente vacio. Cada elemento representa una pelicula en un horario elegido, por ejemplo con `movieId`, `title`, `showtime`, `quantity` y `unitPrice`. Este arreglo sera la fuente de verdad; el HTML solo mostrara su contenido.
+
+4. **Agrega controles a las tarjetas.** En `renderMovies()`, conserva "Ver detalles" y agrega la seleccion de horario y cantidad, mas un boton "Agregar al carrito". Como el filtro vuelve a dibujar las tarjetas, considera escuchar los clics en `movieContainer` y usar `closest()` para encontrar el boton pulsado. Comprueba que el boton existe antes de leer `dataset`; sus valores llegan como texto y hay que convertirlos cuando se usen como numeros.
+
+5. **Actualiza el arreglo al agregar.** Al pulsar el boton, localiza la pelicula por su ID, toma el horario y la cantidad seleccionados y crea el objeto de carrito. Si ya existe la misma pelicula para el mismo horario, aumenta su cantidad en lugar de duplicarla. Otro horario es otra seleccion.
+
+6. **Crea un `<li>` por seleccion.** Haz que una funcion recorra `cart`, cree cada elemento con `document.createElement("li")` y lo agregue a `cartItems`. Muestra titulo, horario, cantidad y subtotal. Usa `textContent` para insertar textos de peliculas de forma segura. El `<li>` se crea dentro de la pagina; no es un archivo guardado en el disco.
+
+7. **Actualiza el resumen.** Calcula el subtotal como `unitPrice * quantity` y suma los subtotales para obtener el total. Actualiza `totalQuantity` y `totalPrice`. Muestra `emptyCartMessage` cuando `cart` no tenga elementos y ocultalo cuando tenga alguno.
+
+8. **Prueba los casos importantes.** Agrega una entrada, vuelve a agregar la misma funcion, agrega otro horario, cambia cantidades, elimina una seleccion y filtra por genero. Verifica que lista, contador, estado vacio y total siempre coincidan con `cart`.
+
+### Preparar pedidos para una futura base de datos
+
+Un pedido se puede representar como un objeto JavaScript o como JSON para enviarlo al servidor. Por ejemplo, puede contener un identificador de pedido, datos de contacto necesarios, las selecciones de pelicula/horario/cantidad, moneda, total mostrado, estado y fecha. Esto es un **objeto de pedido**, no un archivo local que deba contener los datos de pago.
+
+Para un cobro real, el navegador enviara el pedido al backend mediante una solicitud, por ejemplo `POST /orders`. El backend debe volver a comprobar precios y disponibilidad, guardar el pedido en la base de datos y coordinar el cobro con una pasarela de pago. Nunca guardes numeros de tarjeta, codigo de seguridad (CVV), fecha de vencimiento ni contrasenas en el proyecto, en `localStorage` o en un archivo. Si se necesita relacionar el pedido con un pago, se conserva la referencia/token seguro que proporciona la pasarela, no los datos de la tarjeta.
+
+**Orden recomendado:** primero carrito en memoria y renderizado de `<li>`; despues, si hace falta, persistencia del carrito; finalmente, backend, base de datos y pasarela de pago. No implementes el cobro hasta tener un backend que valide el pedido.

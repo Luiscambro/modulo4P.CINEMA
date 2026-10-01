@@ -32,6 +32,20 @@
                 <p class="hero-subtitle">Películas seleccionadas para ti, en un ambiente cómodo y seguro.</p>
             </div>
         </section>
+        <div class="container shopping cart">
+
+
+            <h2 class="section-titleCar">shopping cart</h2>
+            <ul id="cartItems"></ul>
+            <p class="section-selectQuantity">quantity:<span id="totalQuantity">0</span></p>
+            <p class="section-titleCar">Total:<span id="totalPrice">$0.00</span></p>
+            <p id="emptyCartMessage">Tu carrito está vacío.</p>
+
+
+
+
+        </div>
+
         <div class="principal">
             <!--
                 Este botón solo se muestra mediante CSS en pantallas de hasta 720px.
@@ -66,6 +80,8 @@
                 </div>
             </aside>
 
+
+
             <section id="cartelera" class="cartelera container">
                 <h3>Cartelera</h3>
                 <!-- Contenedor vacío donde JavaScript añadirá las tarjetas de películas -->
@@ -92,13 +108,13 @@
             </section>
         </div>
 
-                                 <!--tarea-->
+        <!--tarea-->
         <!-- Este contenedor será rellenado dinámicamente por JavaScript. -->
 
         <div id="movieModal" class="movie-modal" hidden> <!-- Ventana modal para mostrar detalles de la película -->
-            <div class="movie-modal__content">   <!-- Contenido de la ventana modal -->
-                <button id="movieModalClose" type="button">Cerrar</button>  <!-- Botón para cerrar la ventana modal -->
-                <pre id="movieModalText"></pre>  <!-- Contenedor para mostrar el texto de los detalles de la película -->
+            <div class="movie-modal__content"> <!-- Contenido de la ventana modal -->
+                <button id="movieModalClose" type="button">Cerrar</button> <!-- Botón para cerrar la ventana modal -->
+                <pre id="movieModalText"></pre> <!-- Contenedor para mostrar el texto de los detalles de la película -->
             </div>
         </div>
 
