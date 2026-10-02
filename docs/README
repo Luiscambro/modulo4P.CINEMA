@@ -74,7 +74,7 @@ Abre `cinema-web/index.html` con un servidor local, por ejemplo Five Server, y c
 
 ## Guia de estudio: carrito de entradas
 
-Esta guia es el siguiente tramo de aprendizaje; no significa que el carrito o los pagos ya esten implementados.
+Esta guia registra el proceso de implementacion. El estado actual y los casos de revision para el profesor se resumen al final de este documento. El proyecto no procesa pagos reales; el precio es de prueba.
 
 ### Punto de partida
 
@@ -82,7 +82,7 @@ Esta guia es el siguiente tramo de aprendizaje; no significa que el carrito o lo
 - En `index.html`, el contenedor del carrito tiene `cartItems`, `totalQuantity`, `totalPrice` y `emptyCartMessage`. JavaScript actualizara esos elementos.
 - La pelicula tiene horarios, pero comprueba la respuesta real de la API para saber si tambien proporciona un precio. No asumas que `data/movies.json` es la fuente que usa la aplicacion.
 
-### Siguiente sesion: mostrar el carrito
+### Pasos de implementacion del carrito
 
 1. **Inspecciona la respuesta de la API.** En las herramientas de desarrollo del navegador, revisa los objetos que devuelve `getMovies()`. Identifica el tipo de `id` y los nombres de las propiedades disponibles. La respuesta ya contiene objetos; no hace falta reconstruir cada pelicula.
 
@@ -107,3 +107,39 @@ Un pedido se puede representar como un objeto JavaScript o como JSON para enviar
 Para un cobro real, el navegador enviara el pedido al backend mediante una solicitud, por ejemplo `POST /orders`. El backend debe volver a comprobar precios y disponibilidad, guardar el pedido en la base de datos y coordinar el cobro con una pasarela de pago. Nunca guardes numeros de tarjeta, codigo de seguridad (CVV), fecha de vencimiento ni contrasenas en el proyecto, en `localStorage` o en un archivo. Si se necesita relacionar el pedido con un pago, se conserva la referencia/token seguro que proporciona la pasarela, no los datos de la tarjeta.
 
 **Orden recomendado:** primero carrito en memoria y renderizado de `<li>`; despues, si hace falta, persistencia del carrito; finalmente, backend, base de datos y pasarela de pago. No implementes el cobro hasta tener un backend que valide el pedido.
+
+## Guia de revision para el profesor
+
+### Enlaces
+
+- Sitio publicado: [Cinema Web](https://luiscambro.github.io/modulo4P.CINEMA/)
+- Repositorio: [modulo4P.CINEMA](https://github.com/Luiscambro/modulo4P.CINEMA)
+- GitHub Pages publica desde la rama `main`, carpeta `/docs`.
+
+### Funcionalidades implementadas
+
+- La cartelera obtiene peliculas y horarios de Cinema API, con catalogo local de respaldo.
+- Cada pelicula permite elegir horario y cantidad de tiquetes antes de agregarla.
+- El carrito muestra pelicula, genero, horario, cantidad, precio por tiquete y subtotal; tambien calcula cantidad y total general.
+- Si se agrega de nuevo la misma pelicula en el mismo horario, se acumula la cantidad. Un horario diferente crea otra seleccion.
+- El boton `Quitar` elimina una seleccion y actualiza el resumen del carrito.
+- `Confirmar compra` crea un objeto de transaccion con identificador, fecha, items y totales. `JSON.stringify()` lo presenta en pantalla; `Blob` genera el comprobante JSON descargable. Despues de confirmar, el carrito se vacia.
+- La pagina `contacto.html` contiene validaciones en el navegador. El formulario no envia datos a un backend.
+
+### Pruebas realizadas
+
+1. En el carrito se agregaron El viaje de Chihiro, 2 entradas a las 12:30; Interestelar, 1 entrada a las 17:00; y El viaje de Chihiro, 1 entrada a las 19:15. Resultado esperado y observado: 4 entradas y total de `$40.00`, con horarios distintos como selecciones separadas.
+2. Se comprobo que agregar la misma pelicula y horario acumula la cantidad, y que quitar una seleccion actualiza la lista y los totales.
+3. Al confirmar una compra de prueba, se verifico el JSON con los datos de la transaccion, el tipo `application/json` del `Blob` y el nombre de descarga `comprobante-<id>.json`.
+4. En la pagina de contacto, enviar el formulario vacio muestra el mensaje de validacion del nombre.
+5. El sitio publicado en GitHub Pages carga desde `/docs`.
+
+### Como revisar la compra
+
+1. Abre el sitio publicado y agrega las selecciones del primer caso de prueba.
+2. Abre el carrito y comprueba pelicula, genero, horario, cantidad, precio por tiquete, subtotales, cantidad total y total general.
+3. Pulsa `Confirmar compra`. El recibo JSON debe aparecer en el panel y el navegador debe ofrecer o iniciar la descarga del archivo `.json`.
+4. Abre el archivo descargado y comprueba que contenga el identificador, la fecha, los items y los totales. El carrito debe quedar vacio despues de confirmar.
+5. Abre `Contacto` y prueba el envio con datos vacios o invalidos para revisar los mensajes de validacion.
+
+El precio de `$10.00` es un valor de demostracion. No se realiza ningun cobro ni se almacenan datos de pago.
