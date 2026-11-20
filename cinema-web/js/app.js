@@ -231,14 +231,16 @@ function renderMovies(movies) {
                 <p class="movie-card__description">${movie.shortDescription}</p>
                 <div class="movie-card__meta">
         
-                    <label>Horario: <select class="movie-card__showtime">${movie.showtimes.map(showtime => `<option value="${showtime}">${showtime}</option>`).join("")}</select></label>
+                    <label>Horario: <select class="movie-card__showtime" 
+                    id="showtime-${movie.id}">${movie.showtimes.map(showtime => `<option value="${showtime}">${showtime}</option>`).join("")}</select>
+                    </label>
                     
                     <span class="movie-card__duration">${movie.duration} min</span>
                     <span class="movie-card__genre">${movie.genre}</span>                    
                 </div>
 
 
-                <label>Entradas: <input class="movie-card__quantity" type="number" min="1" value="1"></label>
+                <label>Entradas: <input class="movie-card__quantity" type="number" min="1" value="1" id="quantity-${movie.id}"></label>
                 <button type="button" class="movie-card__add-to-cart" data-movie-id="${movie.id}">Agregar al carrito</button>
             
             
